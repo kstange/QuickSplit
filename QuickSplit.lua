@@ -29,7 +29,8 @@ local Events = nil
 
 -- Start splitting items in a regular container such as player bags or bank
 function QuickSplit(_, itemLocation)
-    if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) and C_Item.GetStackCount(itemLocation) > 1 then
+    if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) and
+            C_Item.GetStackCount(itemLocation) > 1 then
         print("Splitting stack of", C_Item.GetItemLink(itemLocation))
         activeItemLocation = itemLocation
         Split()
