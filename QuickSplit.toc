@@ -1,0 +1,8 @@
+## Interface: 120000, 110207, 110205
+## Version: @project-version@
+## Title: QuickSplit
+## Notes: Quickly Split a Stack of Items
+## Author: SimGuy
+## IconAtlas: Cursor_buy_32
+
+QuickSplit.lua
