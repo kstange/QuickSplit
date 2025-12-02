@@ -10,29 +10,34 @@
 
 local _, _ = ...
 
--- Handle events for bags
+-- Handle events for splitting stacks
 function HandleEvent(_, event, _)
-	if event == "BAG_UPDATE_DELAYED" then
-		Split()
-	end
-	if event == "GUILDBANK_ITEM_LOCK_CHANGED" then
-		C_Timer.After(0.5, GuildItemCheck)
-	end
+    -- Continue splitting after each successful bag update
+    if event == "BAG_UPDATE_DELAYED" then
+        Split()
+    end
+
+    -- Continue splitting each time the lock state changes in the guild bank
+    if event == "GUILDBANK_ITEM_LOCK_CHANGED" then
+        C_Timer.After(0.5, GuildItemCheck)
+    end
 end
 
 local activeItemLocation = nil
 local activeGuildItem = nil
 local Events = nil
 
+-- Start splitting items in a regular container such as player bags or bank
 function QuickSplit(_, itemLocation)
-	if itemLocation and IsAltKeyDown() and
-	   C_Item.DoesItemExist(itemLocation) and C_Item.GetStackCount(itemLocation) > 1 then
-		print("Splitting stack of", C_Item.GetItemLink(itemLocation))
-		activeItemLocation = itemLocation
-		Split()
-	end
+    if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) and C_Item.GetStackCount(itemLocation) > 1 then
+        print("Splitting stack of", C_Item.GetItemLink(itemLocation))
+        activeItemLocation = itemLocation
+        Split()
+    end
 end
 
+-- Pick up one item and place it in another slot
+-- If there are no more items, or no more slots, mark the task as done
 function Split()
     local itemLocation = activeItemLocation
     if itemLocation and C_Item.DoesItemExist(itemLocation) then
@@ -50,16 +55,20 @@ function Split()
     end
 end
 
+-- Start splitting items in the guild bank, but due to the way the guild bank
+-- works, the first click will pick up the stack, so drop it first
 function GuildQuickSplit(tab, slot)
-	local type = GetCursorInfo()
-	if IsAltKeyDown() and type == "item" and not activeGuildItem then
-		print("Splitting stack of", GetGuildBankItemLink(tab, slot))
-		--print("dropping item")
-		PickupGuildBankItem(tab, slot)
-                activeGuildItem = { tab, slot }
-	end
+    local type = GetCursorInfo()
+    if IsAltKeyDown() and type == "item" and not activeGuildItem then
+        print("Splitting stack of", GetGuildBankItemLink(tab, slot))
+        --print("dropping item")
+        PickupGuildBankItem(tab, slot)
+        activeGuildItem = { tab, slot }
+    end
 end
 
+-- Each time the lock state is changed, generally when an item is picked up or
+-- put down in the bank, see if we're holding something and then react accordingly
 function GuildItemCheck()
     local type = GetCursorInfo()
     if not type then
@@ -71,6 +80,7 @@ function GuildItemCheck()
     end
 end
 
+-- Pick up a guild item and put it on the cursor unless we have no more items to pick up
 function GuildItemPickup()
     if not activeGuildItem then return end
     local tab = activeGuildItem[1]
@@ -88,6 +98,8 @@ function GuildItemPickup()
     end
 end
 
+-- Put down the item we have on the cursor in a new slot, unless there's nowhere to put
+-- it, in which case put it back where we found it
 function GuildItemDrop()
     if not activeGuildItem then return end
     local tab = activeGuildItem[1]
@@ -96,8 +108,8 @@ function GuildItemDrop()
     if type == "item" then
         for i = 1, 98 do
             local item = GetGuildBankItemInfo(tab, i)
-	    --print('checking slot', i, ' remaining', count)
-	    if not item then
+        --print('checking slot', i, ' remaining', count)
+        if not item then
                 --print("placing 1 in slot", i)
                 PickupGuildBankItem(tab, i)
                 return
@@ -110,18 +122,14 @@ function GuildItemDrop()
 end
 
 -- These are init steps specific to this addon
--- This should be run before Core:Init()
 function Init()
-	Events = CreateFrame("Frame")
-	Events:RegisterEvent("BAG_UPDATE")
-	Events:RegisterEvent("BAG_UPDATE_DELAYED")
-	Events:RegisterEvent("GUILDBANK_ITEM_LOCK_CHANGED")
-	Events:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
-	Events:SetScript("OnEvent", HandleEvent)
+    Events = CreateFrame("Frame")
+    Events:RegisterEvent("BAG_UPDATE_DELAYED")
+    Events:RegisterEvent("GUILDBANK_ITEM_LOCK_CHANGED")
+    Events:SetScript("OnEvent", HandleEvent)
 
-	hooksecurefunc("HandleModifiedItemClick", QuickSplit)
-        hooksecurefunc("PickupGuildBankItem", GuildQuickSplit)
+    hooksecurefunc("HandleModifiedItemClick", QuickSplit)
+    hooksecurefunc("PickupGuildBankItem", GuildQuickSplit)
 end
-
 
 Init()
