@@ -30,7 +30,6 @@ end
 
 -- Start splitting items in a regular container such as player bags or bank
 function QuickSplit:QuickSplit(itemLocation)
-    print(itemLocation)
     if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) and
             C_Item.GetStackCount(itemLocation) > 1 then
         print("Splitting stack of", C_Item.GetItemLink(itemLocation))
