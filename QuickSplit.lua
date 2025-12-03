@@ -10,36 +10,38 @@
 
 local _, _ = ...
 
--- Handle events for splitting stacks
-function HandleEvent(_, event, _)
-    -- Continue splitting after each successful bag update
-    if event == "BAG_UPDATE_DELAYED" then
-        Split()
-    end
-
-    -- Continue splitting each time the lock state changes in the guild bank
-    if event == "GUILDBANK_ITEM_LOCK_CHANGED" then
-        C_Timer.After(0.5, GuildItemCheck)
-    end
-end
-
+local QuickSplit = {}
 local activeItemLocation = nil
 local activeGuildItem = nil
 local Events = nil
 
+-- Handle events for splitting stacks
+function QuickSplit:HandleEvent(event, _)
+    -- Continue splitting after each successful bag update
+    if event == "BAG_UPDATE_DELAYED" then
+        QuickSplit:Split()
+    end
+
+    -- Continue splitting each time the lock state changes in the guild bank
+    if event == "GUILDBANK_ITEM_LOCK_CHANGED" then
+        C_Timer.After(0.5, QuickSplit.GuildItemCheck)
+    end
+end
+
 -- Start splitting items in a regular container such as player bags or bank
-function QuickSplit(_, itemLocation)
+function QuickSplit:QuickSplit(itemLocation)
+    print(itemLocation)
     if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) and
             C_Item.GetStackCount(itemLocation) > 1 then
         print("Splitting stack of", C_Item.GetItemLink(itemLocation))
         activeItemLocation = itemLocation
-        Split()
+        QuickSplit:Split()
     end
 end
 
 -- Pick up one item and place it in another slot
 -- If there are no more items, or no more slots, mark the task as done
-function Split()
+function QuickSplit:Split()
     local itemLocation = activeItemLocation
     if itemLocation and C_Item.DoesItemExist(itemLocation) then
         local container, slot = itemLocation:GetBagAndSlot()
@@ -58,7 +60,8 @@ end
 
 -- Start splitting items in the guild bank, but due to the way the guild bank
 -- works, the first click will pick up the stack, so drop it first
-function GuildQuickSplit(tab, slot)
+function QuickSplit:GuildQuickSplit(slot)
+    local tab = self
     local type = GetCursorInfo()
     if IsAltKeyDown() and type == "item" and not activeGuildItem then
         print("Splitting stack of", GetGuildBankItemLink(tab, slot))
@@ -70,19 +73,19 @@ end
 
 -- Each time the lock state is changed, generally when an item is picked up or
 -- put down in the bank, see if we're holding something and then react accordingly
-function GuildItemCheck()
+function QuickSplit:GuildItemCheck()
     local type = GetCursorInfo()
     if not type then
         --print("nothing on cursor")
-        GuildItemPickup()
+        QuickSplit:GuildItemPickup()
     else
         --print(type, "on cursor")
-        GuildItemDrop()
+        QuickSplit:GuildItemDrop()
     end
 end
 
 -- Pick up a guild item and put it on the cursor unless we have no more items to pick up
-function GuildItemPickup()
+function QuickSplit:GuildItemPickup()
     if not activeGuildItem then return end
     local tab = activeGuildItem[1]
     local slot = activeGuildItem[2]
@@ -101,7 +104,7 @@ end
 
 -- Put down the item we have on the cursor in a new slot, unless there's nowhere to put
 -- it, in which case put it back where we found it
-function GuildItemDrop()
+function QuickSplit:GuildItemDrop()
     if not activeGuildItem then return end
     local tab = activeGuildItem[1]
     local slot = activeGuildItem[2]
@@ -123,14 +126,14 @@ function GuildItemDrop()
 end
 
 -- These are init steps specific to this addon
-function Init()
+function QuickSplit:Init()
     Events = CreateFrame("Frame")
     Events:RegisterEvent("BAG_UPDATE_DELAYED")
     Events:RegisterEvent("GUILDBANK_ITEM_LOCK_CHANGED")
-    Events:SetScript("OnEvent", HandleEvent)
+    Events:SetScript("OnEvent", QuickSplit.HandleEvent)
 
-    hooksecurefunc("HandleModifiedItemClick", QuickSplit)
-    hooksecurefunc("PickupGuildBankItem", GuildQuickSplit)
+    hooksecurefunc("HandleModifiedItemClick", QuickSplit.QuickSplit)
+    hooksecurefunc("PickupGuildBankItem", QuickSplit.GuildQuickSplit)
 end
 
-Init()
+QuickSplit:Init()
