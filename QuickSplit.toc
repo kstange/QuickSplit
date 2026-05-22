@@ -6,5 +6,6 @@
 ## IconAtlas: Cursor_buy_32
 
 ## X-Curse-Project-ID: 1550233
+## X-Wago-ID: b6XeYBKp
 
 QuickSplit.lua
