@@ -8,7 +8,7 @@ See above!
 
 ## Classic Support
 
-I've done limited testing with Classic versions because I don't play them, but I believe everything should work.  If you report bugs or submit patches, I'll do my best to address them.
+I have not tested this with Classic versions yet. I'll take a look at some point.
 
 ## Compatibility
 
