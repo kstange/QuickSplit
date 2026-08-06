@@ -1,3 +1,7 @@
+# Version 12.1.0.0
+
+- Updated TOC for Retail 12.1.0
+
 # Version 12.0.5.0
 
 - Updated TOC for Retail 12.0.5
