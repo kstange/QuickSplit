@@ -2,15 +2,6 @@
 
 - Updated TOC for Retail 12.1.0
 
-# Version 12.0.5.0
-
-- Updated TOC for Retail 12.0.5
-- Updated TOC for Retail 12.0.7 (PTR)
-
-# Version 11.2.7.0
-
-- Initial release
-
 # Release History
 
-This has never been released before.
+Full release history can be found [here](https://github.com/kstange/QuickSplit/wiki/Release-Notes).
