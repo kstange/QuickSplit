@@ -144,7 +144,7 @@ function QuickSplit:Init()
         hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", QuickSplit.QuickSplitClassic)
         if BankFrameItemButtonGeneric_OnModifiedClick then
 	        hooksecurefunc("BankFrameItemButtonGeneric_OnModifiedClick", QuickSplit.QuickSplitClassic)
-	end
+        end
     end
 end
 
