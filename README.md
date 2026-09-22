@@ -10,11 +10,11 @@ See above!
 
 ## Classic Support
 
-I have not tested this with Classic versions yet. I'll take a look at some point.
+Initial Classic support is available, but it has had limited testing. If you encounter issues, please report them.
 
 ## Compatibility
 
-This will probably work with any regular container in the game.
+This should work with any regular container in the game, as well as the bank and guild bank.
 
 ## Localization
 

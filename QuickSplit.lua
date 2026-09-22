@@ -28,6 +28,13 @@ function QuickSplit:HandleEvent(event, _)
     end
 end
 
+function QuickSplit:QuickSplitClassic()
+    if self and self:GetParent() then
+        local itemLocation = ItemLocation:CreateFromBagAndSlot(self:GetParent():GetID(), self:GetID())
+        QuickSplit.QuickSplit(nil, itemLocation)
+    end
+end
+
 -- Start splitting items in a regular container such as player bags or bank
 function QuickSplit:QuickSplit(itemLocation)
     if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) and
@@ -133,6 +140,12 @@ function QuickSplit:Init()
 
     hooksecurefunc("HandleModifiedItemClick", QuickSplit.QuickSplit)
     hooksecurefunc("PickupGuildBankItem", QuickSplit.GuildQuickSplit)
+    if ContainerFrameItemButton_OnModifiedClick then
+        hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", QuickSplit.QuickSplitClassic)
+        if BankFrameItemButtonGeneric_OnModifiedClick then
+	        hooksecurefunc("BankFrameItemButtonGeneric_OnModifiedClick", QuickSplit.QuickSplitClassic)
+	end
+    end
 end
 
 QuickSplit:Init()
