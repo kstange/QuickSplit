@@ -1,3 +1,7 @@
+# Version 12.1.5.0
+
+- Updated TOC for Retail 12.1.7 (PTR)
+
 # Version 12.1.0.2
 
 - Added support for Classic game variants
