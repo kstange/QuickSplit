@@ -18,7 +18,7 @@ This should work with any regular container in the game, as well as the bank and
 
 ## Localization
 
-There is no localization for this addon.
+There is no localization for this addon at this time.
 
 ## LLM Policy
 
