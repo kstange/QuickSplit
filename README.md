@@ -20,3 +20,6 @@ This should work with any regular container in the game, as well as the bank and
 
 There is no localization for this addon.
 
+## LLM Policy
+
+LLM ("Generative AI") agents are not used for development of this project and such contributions will not be accepted.
