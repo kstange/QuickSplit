@@ -1,10 +1,7 @@
-# Version 12.1.5.1
+# Version 12.1.5.0
 
 - Fixed an issue that could sometimes place two items into the same slot when splitting a stack
 - Added localization support for the status messages that appear in the chat window
-
-# Version 12.1.5.0
-
 - Updated TOC for Retail 12.1.7 (PTR)
 
 # Version 12.1.0.2
