@@ -18,7 +18,7 @@ This should work with any regular container in the game, as well as the bank and
 
 ## Localization
 
-There is no localization for this addon at this time.
+If you'd like to help localize this addon, please submit translations [here](https://www.curseforge.com/wow/addons/quicksplit/localization).
 
 ## LLM Policy
 
