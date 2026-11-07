@@ -1,7 +1,7 @@
 # Version 12.1.5.1
 
-- Fixed an issue that could sometimes place two items into the same bag slot
-- Added localization support for status messages that appear in the chat window
+- Fixed an issue that could sometimes place two items into the same slot when splitting a stack
+- Added localization support for the status messages that appear in the chat window
 
 # Version 12.1.5.0
 
