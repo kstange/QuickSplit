@@ -1,3 +1,7 @@
+# Version 12.1.5.1
+
+- Fixed an issue that could sometimes place two items into the same bag slot
+
 # Version 12.1.5.0
 
 - Updated TOC for Retail 12.1.7 (PTR)
