@@ -8,7 +8,10 @@
 -- https://opensource.org/licenses/MIT.
 --
 
-local _, _ = ...
+local _, Shared = ...
+
+-- From Locales/Locales.lua
+local L = Shared.Locale
 
 local QuickSplit = {}
 local activeItemLocation = nil
@@ -50,26 +53,27 @@ end
 -- Start splitting items in a regular container such as player bags or bank
 function QuickSplit:QuickSplit(itemLocation)
     if activeItemLocation then
-        print("Cancelling splitting because another item was clicked")
+        print(L["WARNING_ITEM_CLICKED"])
         activeItemLocation = nil
         usedSlots = {}
     end
     if itemLocation and IsAltKeyDown() and C_Item.DoesItemExist(itemLocation) then
         if GetCursorInfo() then
-            print("You must drop the item you are holding before splitting")
+            print(L["WARNING_DROP_HELD_ITEM"])
             return
         end
         local container = itemLocation:GetBagAndSlot()
         local freeslots = C_Container.GetContainerNumFreeSlots(container)
         local bagname   = C_Container.GetBagName(container)
+        if bagname == "" then bagname = L["CONTAINER"] end
         local itemcount = C_Item.GetStackCount(itemLocation)
         local itemlink  = C_Item.GetItemLink(itemLocation)
         if itemcount <= 1 then
-            print("Unable to split", itemlink, "because there is only one item in the stack")
+            print(format(L["WARNING_STACK_OF_ONE"], itemlink))
         elseif freeslots == 0 then
-            print("Unable to split", itemlink, "because", bagname, "is full")
+            print(format(L["WARNING_CONTAINER_FULL"], itemlink, bagname))
         else
-            print("Splitting", itemcount, itemlink, "into", freeslots, "available slots in", bagname)
+            print(format(L["INFO_SPLIT_STARTED"], itemcount, itemlink, freeslots, bagname))
             activeItemLocation = itemLocation
             QuickSplit:PickUpItem()
         end
@@ -94,7 +98,8 @@ function QuickSplit:PickUpItem()
     local container, slot = itemLocation:GetBagAndSlot()
     local itemcount = C_Item.GetStackCount(itemLocation)
     local freeslots = C_Container.GetContainerNumFreeSlots(container)
-    local bagname   = C_Container.GetBagName(container)
+    local bagname   = C_Container.GetBagName(container) or L["CONTAINER"]
+    if bagname == "" then bagname = L["CONTAINER"] end
 
     -- If there's more work to do, pick up one item
     if itemcount > 1 and freeslots > 0 then
@@ -103,9 +108,9 @@ function QuickSplit:PickUpItem()
     -- If there's not, end the task here
     else
         if itemcount <= 1 then
-            print("Finished splitting successfully")
+            print(L["INFO_SPLIT_SUCCESSFUL"])
         elseif freeslots == 0 then
-            print("Finished splitting early because", bagname, "is full")
+            print(format(L["INFO_SPLIT_FILLED"], bagname))
         end
         activeItemLocation = nil
         usedSlots = {}
@@ -150,9 +155,9 @@ function QuickSplit:DropItem()
     -- the item back where it came from and stop the task
     else
         if itemcount <= 1 then
-            print("No more items left to move (this might be a bug)")
+            print(L["ERROR_NO_MORE_ITEMS"])
         elseif freeslots == 0 then
-            print("No space left for next item (this might be a bug)")
+            print(L["ERROR_NO_MORE_SPACE"])
         end
         C_Container.PickupContainerItem(container, slot)
         activeItemLocation = nil
@@ -170,10 +175,10 @@ function QuickSplit:GuildQuickSplit(slot)
         local itemlink = GetGuildBankItemLink(tab, slot)
         PickupGuildBankItem(tab, slot)
         if (count > 1) then
-            print("Splitting", count, itemlink, "into available slots of Guild Bank")
+            print(format(L["INFO_SPLIT_STARTED"], count, itemlink, "", L["GUILD_BANK"]))
             activeGuildItem = { tab, slot }
         else
-            print("Unable to split", itemlink, "because there is only one item in the stack")
+            print(format(L["WARNING_STACK_OF_ONE"], itemlink))
         end
     end
 end
@@ -200,7 +205,7 @@ function QuickSplit:GuildItemPickup()
         if count > 1 then
             SplitGuildBankItem(tab, slot, 1)
         else
-            print("Finished splitting successfully")
+            print(L["INFO_SPLIT_SUCCESSFUL"])
             activeGuildItem = nil
         end
     end
@@ -222,7 +227,7 @@ function QuickSplit:GuildItemDrop()
             end
         end
         PickupGuildBankItem(tab, slot)
-        print("Finished splitting early because Guild Bank is full")
+        print(format(L["INFO_SPLIT_FILLED"], L["GUILD_BANK"]))
         activeGuildItem = nil
     end
 end

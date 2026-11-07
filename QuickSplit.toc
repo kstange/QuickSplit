@@ -8,4 +8,5 @@
 ## X-Curse-Project-ID: 1550233
 ## X-Wago-ID: b6XeYBKp
 
+Locales\Locales.xml
 QuickSplit.lua
