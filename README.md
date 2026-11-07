@@ -1,6 +1,6 @@
 # About QuickSplit
 
-This addon allows you to quickly split an item stack into individual items by clicking while holding ALT up to the available space in the current container.
+This addon allows you to quickly split an item stack into individual items up to the available space in the current container by clicking while holding ALT.
 
 You can install this addon from [CurseForge](https://www.curseforge.com/wow/addons/quicksplit "CurseForge") or [Wago](https://addons.wago.io/addons/quicksplit).
 
