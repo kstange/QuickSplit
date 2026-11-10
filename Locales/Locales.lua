@@ -1,5 +1,5 @@
 --
--- Merchant Plus
+-- QuickSplit
 --
 -- Locales\Locales.lua -- Defines a basic localization lookup method
 --
