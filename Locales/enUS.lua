@@ -1,5 +1,5 @@
 --
--- Merchant Plus
+-- QuickSplit
 --
 -- Locales\enUS.lua -- enUS Localization File
 --
@@ -9,7 +9,7 @@
 --
 
 -- Please use CurseForge to submit localization content for another language:
--- https://www.curseforge.com/wow/addons/merchant-plus/localization
+-- https://www.curseforge.com/wow/addons/quicksplit/localization
 
 -- allow enUS to fill empty strings for other locales
 --local Locale = GetLocale()
